@@ -15,7 +15,7 @@ function App() {
   return (
     <WishlistProvider>
       <CartProvider>
-        <Router>
+        <Router basename="/gaming">
           <ScrollToTop />
           <div className="relative min-h-screen bg-slate-950 text-slate-200 overflow-hidden flex flex-col">
             {/* Background Gradients */}
