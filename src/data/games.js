@@ -1,0 +1,133 @@
+import gameCover1 from '../images/game_cover_1.png';
+import gameCover2 from '../images/game_cover_2.png';
+import gameCover3 from '../images/game_cover_3.png';
+
+export const featuredGame = {
+  id: 'ashen-crown',
+  title: 'Ashen Crown: The Last Stand',
+  subtitle: 'Dark Fantasy RPG',
+  description:
+    'Forge your destiny in a world consumed by fire. Battle through a fallen kingdom, uncover ancient secrets, and reclaim the throne in this award-winning action RPG.',
+  image: gameCover1,
+  rating: 4.9,
+  price: 59.99,
+  discount: 20,
+  tags: ['RPG', 'Action', 'Open World'],
+  releaseDate: '2026-03-15',
+  developer: 'Iron Forge Studios',
+  platform: ['PC', 'PS5', 'Xbox'],
+};
+
+export const games = [
+  {
+    id: 'neon-district-2049',
+    title: 'Neon District 2049',
+    genre: 'Cyberpunk RPG',
+    image: gameCover2,
+    rating: 4.7,
+    price: 49.99,
+    discount: 0,
+    tags: ['RPG', 'Cyberpunk', 'Story Rich'],
+    developer: 'Synth Wave Games',
+    platform: ['PC', 'PS5'],
+  },
+  {
+    id: 'stellar-frontiers',
+    title: 'Stellar Frontiers',
+    genre: 'Space Strategy',
+    image: gameCover3,
+    rating: 4.8,
+    price: 39.99,
+    discount: 25,
+    tags: ['Strategy', 'Sci-Fi', 'Multiplayer'],
+    developer: 'Cosmos Interactive',
+    platform: ['PC'],
+  },
+  {
+    id: 'shadow-realm',
+    title: 'Shadow Realm Online',
+    genre: 'MMORPG',
+    image: gameCover1,
+    rating: 4.5,
+    price: 0,
+    discount: 0,
+    tags: ['MMO', 'Fantasy', 'Co-op'],
+    developer: 'Darklight Studios',
+    platform: ['PC', 'PS5', 'Xbox'],
+  },
+  {
+    id: 'velocity-x',
+    title: 'Velocity X: Overdrive',
+    genre: 'Racing',
+    image: gameCover2,
+    rating: 4.6,
+    price: 29.99,
+    discount: 15,
+    tags: ['Racing', 'Arcade', 'Multiplayer'],
+    developer: 'Turbo Dynamics',
+    platform: ['PC', 'PS5', 'Xbox', 'Switch'],
+  },
+  {
+    id: 'dead-zone',
+    title: 'Dead Zone: Aftermath',
+    genre: 'Survival Horror',
+    image: gameCover3,
+    rating: 4.4,
+    price: 44.99,
+    discount: 0,
+    tags: ['Horror', 'Survival', 'Co-op'],
+    developer: 'Nightmare Factory',
+    platform: ['PC', 'PS5'],
+  },
+  {
+    id: 'legends-arena',
+    title: 'Legends Arena',
+    genre: 'Battle Royale',
+    image: gameCover1,
+    rating: 4.3,
+    price: 0,
+    discount: 0,
+    tags: ['Battle Royale', 'Shooter', 'Free to Play'],
+    developer: 'Apex Digital',
+    platform: ['PC', 'PS5', 'Xbox', 'Mobile'],
+  },
+  {
+    id: 'chrono-shift',
+    title: 'Chrono Shift',
+    genre: 'Puzzle Adventure',
+    image: gameCover2,
+    rating: 4.9,
+    price: 24.99,
+    discount: 10,
+    tags: ['Puzzle', 'Indie', 'Story Rich'],
+    developer: 'Temporal Games',
+    platform: ['PC', 'Switch'],
+  },
+  {
+    id: 'iron-battalion',
+    title: 'Iron Battalion',
+    genre: 'Tactical Shooter',
+    image: gameCover3,
+    rating: 4.6,
+    price: 59.99,
+    discount: 30,
+    tags: ['Shooter', 'Tactical', 'Multiplayer'],
+    developer: 'Steel Forge Interactive',
+    platform: ['PC', 'PS5', 'Xbox'],
+  },
+];
+
+export const categories = [
+  { id: 'action', name: 'Action', icon: '⚔️', count: 1240 },
+  { id: 'rpg', name: 'RPG', icon: '🛡️', count: 890 },
+  { id: 'strategy', name: 'Strategy', icon: '♟️', count: 620 },
+  { id: 'shooter', name: 'Shooter', icon: '🎯', count: 1100 },
+  { id: 'racing', name: 'Racing', icon: '🏎️', count: 340 },
+  { id: 'horror', name: 'Horror', icon: '👻', count: 480 },
+  { id: 'sports', name: 'Sports', icon: '⚽', count: 560 },
+  { id: 'indie', name: 'Indie', icon: '💎', count: 2100 },
+];
+
+export const trendingGames = games.slice(0, 4);
+export const newReleases = games.slice(4, 8);
+export const freeToPlay = games.filter((g) => g.price === 0);

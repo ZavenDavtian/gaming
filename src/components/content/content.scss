@@ -1,0 +1,19 @@
+.content{
+    display:flex;
+    .content-buttons{
+        display: flex;
+        gap: 10px;
+        button{
+            width:161px;
+            height:51px;
+            color:#3A0909;
+            background-color:white;
+            border-radius:5px ;
+            border-width: 0;
+            font-size:24px;        }
+    }
+    .content-left{
+        color:white;
+        padding-left: 46px;
+    }
+}
