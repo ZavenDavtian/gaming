@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   FiStar, FiClock, FiGlobe, FiCpu, FiTag, FiHeart,
   FiShoppingCart, FiArrowLeft, FiCheck, FiExternalLink,
-  FiMonitor, FiCalendar, FiLoader
+  FiMonitor, FiCalendar, FiLoader, FiTrash2
 } from 'react-icons/fi';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -41,11 +41,10 @@ const ScreenshotViewer = ({ screenshots, title }) => {
             <button
               key={i}
               onClick={() => setActive(i)}
-              className={`shrink-0 w-28 aspect-video rounded-xl overflow-hidden border-2 transition-all ${
-                i === active
+              className={`shrink-0 w-28 aspect-video rounded-xl overflow-hidden border-2 transition-all ${i === active
                   ? 'border-indigo-500 scale-105'
                   : 'border-white/10 hover:border-white/30 opacity-60 hover:opacity-100'
-              }`}
+                }`}
             >
               <img src={src} alt="" className="w-full h-full object-cover" />
             </button>
@@ -74,7 +73,7 @@ const DetailSkeleton = () => (
 
 // ─────────────────────────────────────────────────────────────────────────
 const GameDetails = () => {
-  const { cart, addToCart } = useCart();
+  const { cart, addToCart, removeFromCart } = useCart();
   const { id } = useParams();
 
   const { game, screenshots, loading, error } = useGameDetail(id);
@@ -147,12 +146,11 @@ const GameDetails = () => {
               )}
               {game.metacritic && (
                 <div className="flex items-center gap-2">
-                  <span className={`text-xs font-black px-2 py-0.5 rounded ${
-                    game.tier === 'Mighty' ? 'bg-yellow-600 text-white' :
-                    game.tier === 'Strong' ? 'bg-emerald-600 text-white' :
-                    game.tier === 'Fair'   ? 'bg-slate-600 text-white' :
-                                            'bg-red-600 text-white'
-                  }`}>
+                  <span className={`text-xs font-black px-2 py-0.5 rounded ${game.tier === 'Mighty' ? 'bg-yellow-600 text-white' :
+                      game.tier === 'Strong' ? 'bg-emerald-600 text-white' :
+                        game.tier === 'Fair' ? 'bg-slate-600 text-white' :
+                          'bg-red-600 text-white'
+                    }`}>
                     {game.tier || 'Score'} {game.metacritic}
                   </span>
                 </div>
@@ -178,17 +176,16 @@ const GameDetails = () => {
             </div>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              onClick={() => addToCart(game)}
-              disabled={!!isInCart}
-              className={`w-full py-4 rounded-xl font-bold transition-all shadow-lg flex items-center justify-center gap-2 ${
-                isInCart
-                  ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 cursor-default'
+              onClick={() => isInCart ? removeFromCart(game.id) : addToCart(game)}
+              className={`w-full py-4 rounded-xl font-bold transition-all shadow-lg flex items-center justify-center gap-2 ${isInCart
+                  ? 'bg-emerald-600/20 hover:bg-rose-500/20 hover:border-rose-500/30 hover:text-rose-400 text-emerald-400 border border-emerald-500/30 group'
                   : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30'
-              }`}
+                }`}
             >
               {isInCart ? (
                 <motion.div initial={{ scale: 0.5 }} animate={{ scale: 1 }} className="flex items-center gap-2">
-                  <FiCheck className="text-xl" /> In Vault
+                  <span className="group-hover:hidden flex items-center gap-2"><FiCheck className="text-xl" /> In Vault</span>
+                  <span className="hidden group-hover:flex items-center gap-2"><FiTrash2 className="text-xl" /> Remove from Vault</span>
                 </motion.div>
               ) : (
                 <div className="flex items-center gap-2">
@@ -196,13 +193,12 @@ const GameDetails = () => {
                 </div>
               )}
             </motion.button>
-            <button 
+            <button
               onClick={() => toggleWishlist(game)}
-              className={`w-full py-4 border rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${
-                isWishlisted 
-                  ? 'bg-rose-500/20 hover:bg-rose-500/30 border-rose-500/30 text-rose-400' 
+              className={`w-full py-4 border rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${isWishlisted
+                  ? 'bg-rose-500/20 hover:bg-rose-500/30 border-rose-500/30 text-rose-400'
                   : 'bg-white/5 hover:bg-white/10 border-white/10 text-white'
-              }`}
+                }`}
             >
               <FiHeart className={isWishlisted ? 'fill-current' : ''} />
               {isWishlisted ? 'Wishlisted' : 'Wishlist'}

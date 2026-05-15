@@ -74,8 +74,9 @@ const Navbar = () => {
   }, [isSearchOpen]);
 
   return (
-    <header className="sticky top-0 z-50 glass-panel border-b-0 rounded-none sm:rounded-2xl sm:mt-4 sm:mx-6">
-      <div className="container mx-auto px-4 lg:px-8">
+    <>
+      <header className="sticky top-0 z-50 glass-panel border-b-0 rounded-none sm:rounded-2xl sm:mt-4 sm:mx-6">
+        <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex flex-shrink-0 items-center gap-3 group">
@@ -492,6 +493,7 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      </header>
 
       {/* ── Login Modal ── */}
       <AnimatePresence>
@@ -560,7 +562,7 @@ const Navbar = () => {
           </div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 };
 

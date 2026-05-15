@@ -8,6 +8,8 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Gallery from './pages/Gallery';
 import GameDetails from './pages/GameDetails';
+import Community from './pages/Community';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 
@@ -32,6 +34,8 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/gallery" element={<Gallery />} />
                 <Route path="/game/:id" element={<GameDetails />} />
+                <Route path="/community" element={<Community />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               </Routes>
             </main>
 

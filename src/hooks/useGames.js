@@ -5,7 +5,6 @@ import {
   fetchGameScreenshots,
   fetchTrendingGames,
   fetchGamesByGenre,
-  searchGames,
   API_AVAILABLE,
 } from '../services/rawgApi';
 import {
@@ -32,13 +31,15 @@ const normaliseStatic = (g) => ({
 // useGamesList — paginated / filtered list (used by Gallery)
 // --------------------------------------------------------------------------
 export const useGamesList = ({ search = '', genre = 'all', page = 1 } = {}) => {
-  const [games, setGames] = useState([]);
+  // baseGames: the full set loaded from the API (no search filter applied)
+  const [baseGames, setBaseGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [totalCount, setTotalCount] = useState(0);
   const [hasMore, setHasMore] = useState(false);
   const abortRef = useRef(null);
 
+  // ── API fetch: only re-runs when genre or page changes, NOT search ──────
   const load = useCallback(async () => {
     if (abortRef.current) abortRef.current.abort();
     abortRef.current = new AbortController();
@@ -46,22 +47,18 @@ export const useGamesList = ({ search = '', genre = 'all', page = 1 } = {}) => {
     setLoading(true);
     setError(null);
 
+    // Static fallback (no API key)
     if (!API_AVAILABLE) {
-      // Graceful static fallback
-      let result = staticGames.map(normaliseStatic);
-      if (search) {
-        result = result.filter((g) =>
-          g.title.toLowerCase().includes(search.toLowerCase())
-        );
-      }
+      let result = [staticFeatured, ...staticGames].map(normaliseStatic);
       if (genre !== 'all') {
+        const g = genre.toLowerCase();
         result = result.filter(
-          (g) =>
-            g.genre?.toLowerCase().includes(genre.toLowerCase()) ||
-            g.tags?.some((t) => t.toLowerCase() === genre.toLowerCase())
+          (item) =>
+            item.genre?.toLowerCase().includes(g) ||
+            item.tags?.some((t) => t.toLowerCase() === g)
         );
       }
-      setGames(result);
+      setBaseGames(result);
       setTotalCount(result.length);
       setHasMore(false);
       setLoading(false);
@@ -70,32 +67,52 @@ export const useGamesList = ({ search = '', genre = 'all', page = 1 } = {}) => {
 
     try {
       let data;
-      if (search) {
-        data = await searchGames(search, page);
-      } else if (genre !== 'all') {
+      if (genre !== 'all') {
         data = await fetchGamesByGenre(genre, page, 20);
       } else {
         data = await fetchGames({ page, pageSize: 20, ordering: '-released' });
       }
-      setGames(data.results);
+
+      // Prepend local static games (with images) so they're always available
+      const allLocal = [staticFeatured, ...staticGames].map(normaliseStatic);
+      const apiIds = new Set(data.results.map((g) => String(g.id)));
+      const localOnly = allLocal.filter((g) => !apiIds.has(String(g.id)));
+
+      const merged = page === 1 ? [...localOnly, ...data.results] : data.results;
+      setBaseGames(merged);
       setTotalCount(data.count);
       setHasMore(!!data.next);
     } catch (err) {
       if (err.name === 'AbortError') return;
       setError(err.message);
-      // Fallback to static on error
-      setGames(staticGames.map(normaliseStatic));
+      setBaseGames([staticFeatured, ...staticGames].map(normaliseStatic));
     } finally {
       setLoading(false);
     }
-  }, [search, genre, page]);
+  }, [genre, page]); // ← search intentionally excluded
 
   useEffect(() => {
     load();
     return () => abortRef.current?.abort();
   }, [load]);
 
-  return { games, loading, error, totalCount, hasMore, refetch: load };
+  // ── Client-side search filter (no API call, images preserved) ───────────
+  const games = search
+    ? baseGames.filter((g) =>
+        g.title?.toLowerCase().includes(search.toLowerCase()) ||
+        g.genre?.toLowerCase().includes(search.toLowerCase()) ||
+        g.tags?.some((t) => t.toLowerCase().includes(search.toLowerCase()))
+      )
+    : baseGames;
+
+  return {
+    games,
+    loading,
+    error,
+    totalCount: search ? games.length : totalCount,
+    hasMore: search ? false : hasMore,
+    refetch: load,
+  };
 };
 
 // --------------------------------------------------------------------------

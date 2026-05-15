@@ -135,7 +135,8 @@ export const fetchGames = async ({
     const isPaginated = all.length <= pageSize * 2; 
     
     if (isPaginated) {
-      return { count: 1000, next: all.length > 0, results: all.slice(0, pageSize) };
+      const maxPages = Math.ceil(1000 / pageSize);
+      return { count: 1000, next: all.length > 0 && page < maxPages, results: all.slice(0, pageSize) };
     } else {
       const results = all.slice(skip, skip + pageSize);
       return { count: all.length, next: results.length === pageSize, results };
@@ -151,12 +152,10 @@ export const fetchGames = async ({
   }
 };
 
-/** Search games by title */
 export const searchGames = async (query, page = 1, pageSize = 20) => {
   const encoded = encodeURIComponent(query);
   const data = await apiFetch(`/game/search?criteria=${encoded}`);
   const all = (Array.isArray(data) ? data : [])
-    .filter((g) => g.images?.box?.og || g.images?.banner?.og)
     .map(normalizeGame);
 
   const start = (page - 1) * pageSize;
@@ -190,7 +189,8 @@ export const fetchGamesByGenre = async (genreSlug, page = 1, count = 20) => {
      const isPaginated = allMatching.length <= count * 2;
      
      if (isPaginated) {
-        return { count: 1000, next: allMatching.length > 0, results: allMatching.slice(0, count) };
+        const maxPages = Math.ceil(1000 / count);
+        return { count: 1000, next: allMatching.length > 0 && page < maxPages, results: allMatching.slice(0, count) };
      } else {
         const results = allMatching.slice(skip, skip + count);
         return { count: allMatching.length, next: results.length === count, results };

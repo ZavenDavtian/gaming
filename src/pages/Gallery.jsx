@@ -325,7 +325,7 @@ const Gallery = () => {
           </span>
           <button
             onClick={() => setPage((p) => p + 1)}
-            disabled={!hasMore || loading}
+            disabled={!hasMore || loading || (totalCount > 0 && page >= Math.ceil(totalCount / 20))}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Next <FiChevronRight />
