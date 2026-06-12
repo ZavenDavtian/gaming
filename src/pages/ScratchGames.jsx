@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-const games = [
+const myGames = [
   { id: '1157118622', title: 'Scratch Game 1' },
   { id: '1161913547', title: 'Scratch Game 2' },
   { id: '1163241738', title: 'Scratch Game 3' },
@@ -15,7 +15,30 @@ const games = [
   { id: '1179570810', title: 'Scratch Game 10' },
 ];
 
+const popularGames = [
+  { id: '10128407', title: 'Paper Minecraft' },
+  { id: '105500895', title: 'Geometry Dash' },
+  { id: '110543264', title: 'Slither.io' },
+  { id: '351982746', title: 'Getting Over It' },
+  { id: '400045091', title: 'Subway Surfers' },
+  { id: '137943574', title: 'Five Nights at Freddys' },
+  { id: '493120398', title: 'THE GREAT SNAKE ESCAPE' },
+  { id: '1285171146', title: 'Frozen Frenzy' },
+  { id: '847915138', title: 'Paper Plane Fly' },
+  { id: '1132475012', title: 'Pick A Lock' },
+  { id: '405198495', title: 'pipe puzzles' },
+  { id: '134204916', title: 'Piano' },
+  { id: '1124350480', title: 'Slime Platformer v2.0' },
+  { id: '1274358391', title: 'Fruit Frenzy! ' },
+  { id: '208527646', title: 'バルーンサッカー / Balloon Football' },
+  { id: '1041557087', title: 'Key Master' },
+];
+
 const ScratchGames = () => {
+  const [activeTab, setActiveTab] = useState('myGames');
+
+  const displayedGames = activeTab === 'myGames' ? myGames : popularGames;
+
   return (
     <div className="py-12">
       <motion.div
@@ -25,20 +48,41 @@ const ScratchGames = () => {
         className="text-center mb-16 relative"
       >
         <h1 className="text-4xl md:text-5xl font-black mb-6 bg-gradient-to-r from-indigo-400 via-purple-400 to-fuchsia-400 text-transparent bg-clip-text">
-          My Scratch Games
+          Scratch Games
         </h1>
-        <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-          Explore my collection of interactive games created with Scratch. Click on a game below to start playing!
+        <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-8">
+          Explore interactive games created with Scratch. Click on a game below to start playing!
         </p>
+
+        {/* Tab Switcher */}
+        <div className="flex justify-center items-center space-x-2 bg-slate-800/50 p-1.5 rounded-2xl w-max mx-auto border border-white/10 backdrop-blur-sm">
+          <button
+            onClick={() => setActiveTab('myGames')}
+            className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${activeTab === 'myGames'
+                ? 'bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]'
+                : 'text-slate-400 hover:text-white hover:bg-white/5'
+              }`}
+          >
+            My Games
+          </button>
+          <button
+            onClick={() => setActiveTab('popular')}
+            className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${activeTab === 'popular'
+                ? 'bg-fuchsia-500 text-white shadow-[0_0_15px_rgba(217,70,239,0.4)]'
+                : 'text-slate-400 hover:text-white hover:bg-white/5'
+              }`}
+          >
+            Popular Games
+          </button>
+        </div>
       </motion.div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {games.map((game, index) => (
+        {displayedGames.map((game, index) => (
           <motion.div
-            key={game.id}
+            key={`${activeTab}-${game.id}`}
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.05 }}
           >
             <Link to={`/scratch-game/${game.id}`} className="group block relative rounded-2xl overflow-hidden glass-panel border border-white/10 hover:border-indigo-500/50 transition-all duration-300 h-full flex flex-col">
@@ -56,7 +100,7 @@ const ScratchGames = () => {
                 </div>
               </div>
               <div className="p-5 flex-grow flex flex-col justify-center">
-                <h3 className="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors">Game {index + 1}</h3>
+                <h3 className="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors">{game.title}</h3>
                 <p className="text-sm text-slate-400 mt-2">Click to play this game!</p>
               </div>
             </Link>
