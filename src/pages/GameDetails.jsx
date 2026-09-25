@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   FiStar, FiClock, FiGlobe, FiCpu, FiTag, FiHeart,
   FiShoppingCart, FiArrowLeft, FiCheck, FiExternalLink,
-  FiMonitor, FiCalendar, FiLoader, FiTrash2
+  FiMonitor, FiCalendar, FiTrash2
 } from 'react-icons/fi';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
