@@ -12,6 +12,7 @@ import Community from './pages/Community';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import ScratchGames from './pages/ScratchGames';
 import ScratchGameDetail from './pages/ScratchGameDetail';
+import MiniGames from './pages/MiniGames';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/scratch-games" element={<ScratchGames />} />
                 <Route path="/scratch-game/:id" element={<ScratchGameDetail />} />
+                <Route path="/mini-games" element={<MiniGames />} />
               </Routes>
             </main>
 

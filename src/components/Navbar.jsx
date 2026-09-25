@@ -14,6 +14,7 @@ const navLinks = [
   { name: 'Gallery', path: '/gallery' },
   { name: 'Contact', path: '/contact' },
   { name: 'Scratch Games', path: '/scratch-games' },
+  { name: 'Mini Games', path: '/mini-games' },
 ];
 
 const Navbar = () => {

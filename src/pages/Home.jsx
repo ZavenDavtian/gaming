@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useTrendingGames, useFeaturedGame } from '../hooks/useGames';
 import { categories } from '../data/games';
-import { API_AVAILABLE } from '../services/rawgApi';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -28,31 +27,6 @@ const SkeletonCard = () => (
   </div>
 );
 
-// ----------- API key banner -----------
-const ApiKeyBanner = () => (
-  <motion.div
-    initial={{ opacity: 0, y: -10 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="mb-6 flex items-start gap-3 px-5 py-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-sm"
-  >
-    <span className="text-lg leading-none mt-0.5">🔑</span>
-    <div>
-      <strong className="font-bold">Showing demo data.</strong>{' '}
-      Connect live OpenCritic data free:{' '}
-      <a
-        href="https://rapidapi.com/opencritic-opencritic-default/api/opencritic-api"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="underline hover:text-amber-200 transition-colors"
-      >
-        subscribe on RapidAPI
-      </a>
-      , then add your key to <code className="bg-black/30 px-1 rounded">.env</code> as{' '}
-      <code className="bg-black/30 px-1 rounded">REACT_APP_OPENCRITIC_KEY</code>.
-    </div>
-  </motion.div>
-);
-
 const Home = () => {
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
   const { cart, addToCart } = useCart();
@@ -63,8 +37,6 @@ const Home = () => {
 
   return (
     <div className="space-y-20 pb-20">
-      {!API_AVAILABLE && <ApiKeyBanner />}
-
       {/* ── Hero Section ── */}
       <section className="relative pt-12 md:pt-24 pb-12 flex flex-col md:flex-row items-center gap-12">
         <motion.div
@@ -172,12 +144,10 @@ const Home = () => {
         <div className="flex justify-between items-end mb-8">
           <div>
             <h2 className="text-3xl font-black tracking-tight mb-2">
-              {API_AVAILABLE ? 'Trending Now' : 'Featured Games'}
+              Featured Games
             </h2>
             <p className="text-slate-400">
-              {API_AVAILABLE
-                ? 'Highest-rated releases of the last 2 years'
-                : 'Explore our curated game selection'}
+              Explore our curated game selection
             </p>
           </div>
           <Link

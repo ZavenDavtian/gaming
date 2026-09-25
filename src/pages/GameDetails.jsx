@@ -4,12 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   FiStar, FiClock, FiGlobe, FiCpu, FiTag, FiHeart,
   FiShoppingCart, FiArrowLeft, FiCheck, FiExternalLink,
-  FiMonitor, FiCalendar, FiLoader, FiTrash2
+  FiMonitor, FiCalendar, FiTrash2
 } from 'react-icons/fi';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useGameDetail } from '../hooks/useGames';
-import { API_AVAILABLE } from '../services/rawgApi';
 
 // ── Screenshot viewer ──────────────────────────────────────────────────────
 const ScreenshotViewer = ({ screenshots, title }) => {
@@ -258,39 +257,22 @@ const GameDetails = () => {
           <section className="glass-panel p-8">
             <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
               <FiCpu className="text-fuchsia-400" />{' '}
-              {API_AVAILABLE ? 'Game Stats' : 'System Specs'}
+              Game Stats
             </h3>
-            {API_AVAILABLE ? (
-              <div className="space-y-4 text-sm">
-                {[
-                  ['Genre', game.genre],
-                  ['Rating', game.rating ? `${game.rating} / 5` : '—'],
-                  ['Metacritic', game.metacritic ? `${game.metacritic} / 100` : '—'],
-                  ['Avg Playtime', game.playtime ? `~${game.playtime} hours` : '—'],
-                  ['Released', game.releaseDate || '—'],
-                ].map(([label, value]) => (
-                  <div key={label} className="flex justify-between border-b border-white/5 pb-2">
-                    <span className="text-slate-500">{label}</span>
-                    <span className="font-semibold text-right max-w-[55%]">{value}</span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="space-y-4 text-sm">
-                {[
-                  ['OS', 'Win 10/11 64-bit'],
-                  ['Processor', 'Intel i7-12700K'],
-                  ['Memory', '16 GB RAM'],
-                  ['Graphics', 'NVIDIA RTX 3070'],
-                  ['Storage', '80 GB SSD'],
-                ].map(([label, value]) => (
-                  <div key={label} className="flex justify-between border-b border-white/5 pb-2">
-                    <span className="text-slate-500">{label}</span>
-                    <span>{value}</span>
-                  </div>
-                ))}
-              </div>
-            )}
+            <div className="space-y-4 text-sm">
+              {[
+                ['Genre', game.genre],
+                ['Rating', game.rating ? `${game.rating} / 5` : '—'],
+                ['Metacritic', game.metacritic ? `${game.metacritic} / 100` : '—'],
+                ['Avg Playtime', game.playtime ? `~${game.playtime} hours` : '—'],
+                ['Released', game.releaseDate || '—'],
+              ].map(([label, value]) => (
+                <div key={label} className="flex justify-between border-b border-white/5 pb-2">
+                  <span className="text-slate-500">{label}</span>
+                  <span className="font-semibold text-right max-w-[55%]">{value}</span>
+                </div>
+              ))}
+            </div>
           </section>
 
           {/* Pro tip */}

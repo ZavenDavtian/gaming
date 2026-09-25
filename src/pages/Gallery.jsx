@@ -5,7 +5,6 @@ import { FiSearch, FiFilter, FiEye, FiShoppingCart, FiCheck, FiLoader, FiAlertCi
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useGamesList } from '../hooks/useGames';
-import { API_AVAILABLE } from '../services/rawgApi';
 
 // Debounce helper
 function useDebounce(value, delay) {
@@ -76,15 +75,10 @@ const Gallery = () => {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
         <div>
           <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tight">
-            {API_AVAILABLE ? 'Game' : 'Project'}{' '}
-            <span className="text-indigo-500">
-              {API_AVAILABLE ? 'Database' : 'Vault'}
-            </span>
+            Game <span className="text-indigo-500">Database</span>
           </h1>
           <p className="text-slate-400">
-            {API_AVAILABLE
-              ? `Explore ${totalCount.toLocaleString()} titles from RAWG's live database`
-              : 'Discover your next obsession among our handcrafted titles.'}
+            Explore {totalCount.toLocaleString()} titles in our library.
           </p>
         </div>
 
@@ -113,29 +107,11 @@ const Gallery = () => {
               className="bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-10 outline-none focus:border-indigo-500/50 appearance-none cursor-pointer w-full"
             >
               <option value="all" className="bg-slate-900">All Categories</option>
-              {/* RAWG genre slugs */}
-              {API_AVAILABLE ? (
-                <>
-                  <option value="action" className="bg-slate-900">Action</option>
-                  <option value="rpg" className="bg-slate-900">RPG</option>
-                  <option value="shooter" className="bg-slate-900">Shooter</option>
-                  <option value="adventure" className="bg-slate-900">Adventure</option>
-                  <option value="strategy" className="bg-slate-900">Strategy</option>
-                  <option value="simulation" className="bg-slate-900">Simulation</option>
-                  <option value="puzzle" className="bg-slate-900">Puzzle</option>
-                  <option value="sports" className="bg-slate-900">Sports</option>
-                  <option value="racing" className="bg-slate-900">Racing</option>
-                  <option value="fighting" className="bg-slate-900">Fighting</option>
-                  <option value="indie" className="bg-slate-900">Indie</option>
-                  <option value="horror" className="bg-slate-900">Horror</option>
-                </>
-              ) : (
-                categories.map((cat) => (
-                  <option key={cat.id} value={cat.id} className="bg-slate-900">
-                    {cat.name}
-                  </option>
-                ))
-              )}
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id} className="bg-slate-900">
+                  {cat.name}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -145,7 +121,7 @@ const Gallery = () => {
       {error && (
         <div className="mb-8 flex items-center gap-3 px-5 py-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-sm">
           <FiAlertCircle className="shrink-0" />
-          <span>Failed to load from RAWG: {error} — showing cached data.</span>
+          <span>Failed to load: {error}</span>
         </div>
       )}
 
@@ -307,8 +283,8 @@ const Gallery = () => {
         </div>
       )}
 
-      {/* ── Pagination (API mode only) ── */}
-      {API_AVAILABLE && games.length > 0 && (
+      {/* ── Pagination ── */}
+      {games.length > 0 && (
         <div className="flex items-center justify-center gap-4 mt-12">
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}

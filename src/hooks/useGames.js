@@ -1,37 +1,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  fetchGames,
-  fetchGameById,
-  fetchGameScreenshots,
-  fetchTrendingGames,
-  fetchGamesByGenre,
-  API_AVAILABLE,
-} from '../services/rawgApi';
-import {
-  games as staticGames,
-  trendingGames as staticTrending,
-  featuredGame as staticFeatured,
-} from '../data/games';
-
-// --------------------------------------------------------------------------
-// Helpers
-// --------------------------------------------------------------------------
-const normaliseStatic = (g) => ({
-  ...g,
-  id: String(g.id),
-  slug: g.id,
-  screenshots: g.image ? [g.image] : [],
-  metacritic: null,
-  playtime: null,
-  website: null,
-  description: g.description || null,
-});
+  fetchAllLocalGames,
+  fetchLocalGamesByGenre,
+  fetchLocalGameById,
+} from '../services/localApi';
 
 // --------------------------------------------------------------------------
 // useGamesList — paginated / filtered list (used by Gallery)
 // --------------------------------------------------------------------------
 export const useGamesList = ({ search = '', genre = 'all', page = 1 } = {}) => {
-  // baseGames: the full set loaded from the API (no search filter applied)
   const [baseGames, setBaseGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -39,7 +16,6 @@ export const useGamesList = ({ search = '', genre = 'all', page = 1 } = {}) => {
   const [hasMore, setHasMore] = useState(false);
   const abortRef = useRef(null);
 
-  // ── API fetch: only re-runs when genre or page changes, NOT search ──────
   const load = useCallback(async () => {
     if (abortRef.current) abortRef.current.abort();
     abortRef.current = new AbortController();
@@ -47,56 +23,39 @@ export const useGamesList = ({ search = '', genre = 'all', page = 1 } = {}) => {
     setLoading(true);
     setError(null);
 
-    // Static fallback (no API key)
-    if (!API_AVAILABLE) {
-      let result = [staticFeatured, ...staticGames].map(normaliseStatic);
-      if (genre !== 'all') {
-        const g = genre.toLowerCase();
-        result = result.filter(
-          (item) =>
-            item.genre?.toLowerCase().includes(g) ||
-            item.tags?.some((t) => t.toLowerCase() === g)
-        );
-      }
-      setBaseGames(result);
-      setTotalCount(result.length);
-      setHasMore(false);
-      setLoading(false);
-      return;
-    }
-
     try {
       let data;
       if (genre !== 'all') {
-        data = await fetchGamesByGenre(genre, page, 20);
+        data = await fetchLocalGamesByGenre(genre, page, 20);
       } else {
-        data = await fetchGames({ page, pageSize: 20, ordering: '-released' });
+        const all = await fetchAllLocalGames();
+        const start = (page - 1) * 20;
+        data = {
+          count: all.length,
+          next: all.length > start + 20,
+          results: all.slice(start, start + 20)
+        };
       }
 
-      // Prepend local static games (with images) so they're always available
-      const allLocal = [staticFeatured, ...staticGames].map(normaliseStatic);
-      const apiIds = new Set(data.results.map((g) => String(g.id)));
-      const localOnly = allLocal.filter((g) => !apiIds.has(String(g.id)));
-
-      const merged = page === 1 ? [...localOnly, ...data.results] : data.results;
-      setBaseGames(merged);
+      const merged = page === 1 ? data.results : data.results;
+      setBaseGames(prev => page === 1 ? merged : [...prev, ...merged]);
       setTotalCount(data.count);
-      setHasMore(!!data.next);
+      setHasMore(data.next);
     } catch (err) {
       if (err.name === 'AbortError') return;
       setError(err.message);
-      setBaseGames([staticFeatured, ...staticGames].map(normaliseStatic));
+      setBaseGames([]);
     } finally {
       setLoading(false);
     }
-  }, [genre, page]); // ← search intentionally excluded
+  }, [genre, page]); 
 
   useEffect(() => {
     load();
     return () => abortRef.current?.abort();
   }, [load]);
 
-  // ── Client-side search filter (no API call, images preserved) ───────────
+  // Client-side search filter
   const games = search
     ? baseGames.filter((g) =>
         g.title?.toLowerCase().includes(search.toLowerCase()) ||
@@ -128,19 +87,11 @@ export const useTrendingGames = (count = 8) => {
 
     const load = async () => {
       setLoading(true);
-      if (!API_AVAILABLE) {
-        setGames(staticTrending.map(normaliseStatic));
-        setLoading(false);
-        return;
-      }
       try {
-        const data = await fetchTrendingGames(count);
-        if (!cancelled) setGames(data.results);
+        const all = await fetchAllLocalGames();
+        if (!cancelled) setGames(all.slice(0, count));
       } catch (err) {
-        if (!cancelled) {
-          setError(err.message);
-          setGames(staticTrending.map(normaliseStatic));
-        }
+        if (!cancelled) setError(err.message);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -154,7 +105,7 @@ export const useTrendingGames = (count = 8) => {
 };
 
 // --------------------------------------------------------------------------
-// useFeaturedGame — top game from popular list as hero
+// useFeaturedGame — top game as hero
 // --------------------------------------------------------------------------
 export const useFeaturedGame = () => {
   const [game, setGame] = useState(null);
@@ -165,20 +116,12 @@ export const useFeaturedGame = () => {
 
     const load = async () => {
       setLoading(true);
-      if (!API_AVAILABLE) {
-        setGame(normaliseStatic(staticFeatured));
-        setLoading(false);
-        return;
-      }
       try {
-        // Pick the highest-scored game from the popular list as the featured hero
-        const data = await fetchTrendingGames(10);
-        const sorted = [...data.results].sort(
-          (a, b) => (b.metacritic || 0) - (a.metacritic || 0)
-        );
-        if (!cancelled) setGame(sorted[0] || null);
+        const all = await fetchAllLocalGames();
+        // Pick the first item as the featured game
+        if (!cancelled) setGame(all[0] || null);
       } catch {
-        if (!cancelled) setGame(normaliseStatic(staticFeatured));
+        // Ignore
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -208,33 +151,19 @@ export const useGameDetail = (idOrSlug) => {
       setLoading(true);
       setError(null);
 
-      if (!API_AVAILABLE) {
-        const found = staticGames.find(
-          (g) => String(g.id) === String(idOrSlug) || g.id === idOrSlug
-        ) || staticFeatured;
-        setGame(normaliseStatic(found));
-        setScreenshots(found?.image ? [found.image] : []);
-        setLoading(false);
-        return;
-      }
-
       try {
-        // OpenCritic IDs are numeric — fetch detail then screenshots separately
-        const detail = await fetchGameById(idOrSlug);
+        const detail = await fetchLocalGameById(idOrSlug);
         if (!cancelled) {
-          setGame(detail);
-          // Fetch screenshots in background; don't block render
-          fetchGameScreenshots(idOrSlug)
-            .then((shots) => { if (!cancelled) setScreenshots(shots); })
-            .catch(() => {});
+          if (!detail) {
+            setError("Game not found.");
+          } else {
+            setGame(detail);
+            setScreenshots(detail.screenshots || []);
+          }
         }
       } catch (err) {
         if (!cancelled) {
           setError(err.message);
-          const found = staticGames.find(
-            (g) => String(g.id) === String(idOrSlug)
-          );
-          if (found) setGame(normaliseStatic(found));
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -259,16 +188,11 @@ export const useTopRatedGames = (count = 20) => {
     let cancelled = false;
     const load = async () => {
       setLoading(true);
-      if (!API_AVAILABLE) {
-        setGames(staticGames.map(normaliseStatic));
-        setLoading(false);
-        return;
-      }
       try {
-        const data = await fetchGames({ pageSize: count, ordering: '-metacritic' });
-        if (!cancelled) setGames(data.results);
+        const all = await fetchAllLocalGames();
+        if (!cancelled) setGames(all.slice(0, count));
       } catch {
-        if (!cancelled) setGames(staticGames.map(normaliseStatic));
+        // Ignore
       } finally {
         if (!cancelled) setLoading(false);
       }
