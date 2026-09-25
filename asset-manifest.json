@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/gaming/static/css/main.978a0542.css",
-    "main.js": "/gaming/static/js/main.ce3d3cf6.js",
-    "static/js/453.8c98ee9f.chunk.js": "/gaming/static/js/453.8c98ee9f.chunk.js",
-    "static/media/game_cover_2.png": "/gaming/static/media/game_cover_2.3398c8d16e3abda263fd.png",
-    "static/media/game_cover_3.png": "/gaming/static/media/game_cover_3.cca1d113d357d1f562a1.png",
-    "static/media/game_cover_1.png": "/gaming/static/media/game_cover_1.a3736dc9fbb2cb291af7.png",
-    "index.html": "/gaming/index.html",
-    "main.978a0542.css.map": "/gaming/static/css/main.978a0542.css.map",
-    "main.ce3d3cf6.js.map": "/gaming/static/js/main.ce3d3cf6.js.map",
-    "453.8c98ee9f.chunk.js.map": "/gaming/static/js/453.8c98ee9f.chunk.js.map"
+    "main.css": "/static/css/main.978a0542.css",
+    "main.js": "/static/js/main.ad22d32b.js",
+    "static/js/453.8c98ee9f.chunk.js": "/static/js/453.8c98ee9f.chunk.js",
+    "static/media/game_cover_2.png": "/static/media/game_cover_2.3398c8d16e3abda263fd.png",
+    "static/media/game_cover_3.png": "/static/media/game_cover_3.cca1d113d357d1f562a1.png",
+    "static/media/game_cover_1.png": "/static/media/game_cover_1.a3736dc9fbb2cb291af7.png",
+    "index.html": "/index.html",
+    "main.978a0542.css.map": "/static/css/main.978a0542.css.map",
+    "main.ad22d32b.js.map": "/static/js/main.ad22d32b.js.map",
+    "453.8c98ee9f.chunk.js.map": "/static/js/453.8c98ee9f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.978a0542.css",
-    "static/js/main.ce3d3cf6.js"
+    "static/js/main.ad22d32b.js"
   ]
 }
