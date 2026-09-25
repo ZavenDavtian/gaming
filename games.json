@@ -14,7 +14,7 @@
   "segments": [
     {
       "title": "Specially for you",
-      "count": 2016,
+      "count": 2026,
       "hits": [
         {
           "id": "97426",
@@ -106454,6 +106454,343 @@
             "vertical": false
           },
           "embed": "<iframe src='https://playgama.com/export/game/1-speed-keyboard-escape?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "984847",
+          "slug": "melon-sandbox",
+          "title": "Melon Sandbox Ragdoll Creative Game",
+          "description": "Experiment with weapons, vehicles, and items in this creative ragdoll sandbox. Play this game online for free on desktop, iOS, and Android devices.",
+          "howToPlayText": "Use mouse or keyboard to play this game.",
+          "gameURL": "https://playgama.com/export/game/melon-sandbox?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7",
+          "playgamaGameUrl": "https://playgama.com/game/melon-sandbox",
+          "genres": [],
+          "tags": [],
+          "images": [
+            "https://static.playgama.com/p-img/pg/melon-sandbox/icon/7f6f91e82ae94c5d97f593a380ea4b11?width=218"
+          ],
+          "videos": [],
+          "mobileReady": [
+            "For Android",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/melon-sandbox?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "599892",
+          "slug": "arrow-puzzle",
+          "title": "Arrow Puzzle: Logic and Strategy Game",
+          "description": "Clear the grid by removing arrows in the correct order in this logic puzzle. Play this game for free online on your desktop, Android, or iOS device.",
+          "howToPlayText": "Use mouse or keyboard to play this game.",
+          "gameURL": "https://playgama.com/export/game/arrow-puzzle?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7",
+          "playgamaGameUrl": "https://playgama.com/game/arrow-puzzle",
+          "genres": [],
+          "tags": [],
+          "images": [
+            "https://static.playgama.com/p-img/pg/arrow-puzzle/big-preview/6f9c8fc74f8a4dd39e6700bc24fce9ce?width=1200",
+            "https://static.playgama.com/p-img/pg/arrow-puzzle/big-preview/6f9c8fc74f8a4dd39e6700bc24fce9ce?width=448"
+          ],
+          "videos": [],
+          "mobileReady": [
+            "For Android",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/arrow-puzzle?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "679840",
+          "slug": "mystery-dumpling-go-merge-io",
+          "title": "Mystery Dumpling Go: Merge IO | Idle Merge Arena",
+          "description": "Collect and merge dumplings to evolve your squad in this idle IO game. Play online for free on desktop, iOS, and Android devices to dominate the arena.",
+          "howToPlayText": "Use mouse or keyboard to play this game.",
+          "gameURL": "https://playgama.com/export/game/mystery-dumpling-go-merge-io?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7",
+          "playgamaGameUrl": "https://playgama.com/game/mystery-dumpling-go-merge-io",
+          "genres": [],
+          "tags": [],
+          "images": [
+            "https://static.playgama.com/p-img/pg/mystery-dumpling-go-merge-io/big_preview/8750aaf5c1994826b8156399b0907a6c?width=1200",
+            "https://static.playgama.com/p-img/pg/mystery-dumpling-go-merge-io/icon/96703dce81ad4988b33dc734ea288955?width=218",
+            "https://static.playgama.com/p-img/pg/mystery-dumpling-go-merge-io/big_preview/8750aaf5c1994826b8156399b0907a6c?width=448"
+          ],
+          "videos": [],
+          "mobileReady": [
+            "For Android",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/mystery-dumpling-go-merge-io?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "465205",
+          "slug": "1-speed-keyboard-escape-obby",
+          "title": "+1 Speed Keyboard Escape: Obby | Obstacle Course Game",
+          "description": "Navigate keyboard keys and overcome obstacles in this obby game. Compete for the leaderboard, buy trails, and perform rebirths. Playable online and free on all devices.",
+          "howToPlayText": "Use mouse or keyboard to play this game.",
+          "gameURL": "https://playgama.com/export/game/1-speed-keyboard-escape-obby?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7",
+          "playgamaGameUrl": "https://playgama.com/game/1-speed-keyboard-escape-obby",
+          "genres": [],
+          "tags": [],
+          "images": [
+            "https://static.playgama.com/p-img/pg/1-speed-keyboard-escape-obby/big_preview/d15be55a23bf463a9f2936f0a8952285?width=1200",
+            "https://static.playgama.com/p-img/pg/1-speed-keyboard-escape-obby/icon/de6b955d153a4152a868a82d2308c7d1?width=218",
+            "https://static.playgama.com/p-img/pg/1-speed-keyboard-escape-obby/big_preview/d15be55a23bf463a9f2936f0a8952285?width=448"
+          ],
+          "videos": [],
+          "mobileReady": [
+            "For Android",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/1-speed-keyboard-escape-obby?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "605650",
+          "slug": "gas-station",
+          "title": "Gas Station Idle Tycoon Game",
+          "description": "Transform a rundown station into a thriving business empire in this idle tycoon game. Manage operations and repair cars online for free on desktop, iOS, and Android.",
+          "howToPlayText": "Use mouse or keyboard to play this game.",
+          "gameURL": "https://playgama.com/export/game/gas-station?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7",
+          "playgamaGameUrl": "https://playgama.com/game/gas-station",
+          "genres": [],
+          "tags": [],
+          "images": [
+            "https://static.playgama.com/p-img/pg/gas-station/big_preview/5f102238e733414b9f60dbe71341689c?width=1200",
+            "https://static.playgama.com/p-img/pg/gas-station/icon/dd49b1d0187e47e5a3854239345631fd?width=218",
+            "https://static.playgama.com/p-img/pg/gas-station/big_preview/5f102238e733414b9f60dbe71341689c?width=448"
+          ],
+          "videos": [],
+          "mobileReady": [
+            "For Android",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/gas-station?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "188403",
+          "slug": "sandbox-city",
+          "title": "Sandbox City Driving and Zombie Survival Game",
+          "description": "Explore a city, drive vehicles, and fight off zombie infections in this browser game. Play Sandbox City online for free on desktop, iOS, and Android devices.",
+          "howToPlayText": "Use mouse or keyboard to play this game.",
+          "gameURL": "https://playgama.com/export/game/sandbox-city?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7",
+          "playgamaGameUrl": "https://playgama.com/game/sandbox-city",
+          "genres": [],
+          "tags": [],
+          "images": [
+            "https://static.playgama.com/p-img/pg/sandbox-city/big_preview/37fbb6acba934ec191fed7948fab077e?width=1200",
+            "https://static.playgama.com/p-img/pg/sandbox-city/icon/207e5c64233b4691a6d164f49d6a8fce?width=218",
+            "https://static.playgama.com/p-img/pg/sandbox-city/big_preview/37fbb6acba934ec191fed7948fab077e?width=448"
+          ],
+          "videos": [],
+          "mobileReady": [
+            "For Android",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/sandbox-city?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "849521",
+          "slug": "extreme-car-driving-simulator",
+          "title": "Extreme Car Driving Simulator: Open World Racing",
+          "description": "Drive and drift in an open world city with advanced physics. This sports car simulator is playable online for free on desktop, iOS, and Android devices.",
+          "howToPlayText": "Use mouse or keyboard to play this game.",
+          "gameURL": "https://playgama.com/export/game/extreme-car-driving-simulator?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7",
+          "playgamaGameUrl": "https://playgama.com/game/extreme-car-driving-simulator",
+          "genres": [],
+          "tags": [],
+          "images": [
+            "https://static.playgama.com/p-img/pg/extreme-car-driving-simulator/big_preview/86f903c9f6234e62be4d6805a9429e7b?width=1200",
+            "https://static.playgama.com/p-img/pg/extreme-car-driving-simulator/icon/9bff8decc9ec43008ea2f060c78b583a?width=218",
+            "https://static.playgama.com/p-img/pg/extreme-car-driving-simulator/big_preview/86f903c9f6234e62be4d6805a9429e7b?width=448"
+          ],
+          "videos": [],
+          "mobileReady": [
+            "For Android",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/extreme-car-driving-simulator?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "506713",
+          "slug": "my-perfect-farm-idle-tycoon",
+          "title": "My Perfect Farm: Idle Tycoon | Idle Farming Simulator",
+          "description": "Manage your farm, grow crops, and care for animals in this idle simulator. Play this relaxing game online for free on your desktop or android device.",
+          "howToPlayText": "Use mouse or keyboard to play this game.",
+          "gameURL": "https://playgama.com/export/game/my-perfect-farm-idle-tycoon?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7",
+          "playgamaGameUrl": "https://playgama.com/game/my-perfect-farm-idle-tycoon",
+          "genres": [],
+          "tags": [],
+          "images": [
+            "https://static.playgama.com/p-img/pg/my-perfect-farm-idle-tycoon/big_preview/1edfd697618e49caa30ecd023a2c15d7?width=1200",
+            "https://static.playgama.com/p-img/pg/my-perfect-farm-idle-tycoon/icon/e931676644b34ddf82073b46c7f33b95?width=218",
+            "https://static.playgama.com/p-img/pg/my-perfect-farm-idle-tycoon/big_preview/1edfd697618e49caa30ecd023a2c15d7?width=448"
+          ],
+          "videos": [],
+          "mobileReady": [
+            "For Android",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/my-perfect-farm-idle-tycoon?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "980201",
+          "slug": "merge-defense-army-behind-the-wall",
+          "title": "Merge Defense: Army Behind the Wall | Strategy Merge Game",
+          "description": "Defend your wall against monster waves by merging archers and mages to increase their power. This strategy game is free to play online on desktop, iOS, and Android.",
+          "howToPlayText": "Use mouse or keyboard to play this game.",
+          "gameURL": "https://playgama.com/export/game/merge-defense-army-behind-the-wall?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7",
+          "playgamaGameUrl": "https://playgama.com/game/merge-defense-army-behind-the-wall",
+          "genres": [],
+          "tags": [],
+          "images": [
+            "https://static.playgama.com/p-img/pg/merge-defense-army-behind-the-wall/big_preview/ba078bbffeaf437a912f0ff3d718f520?width=1200",
+            "https://static.playgama.com/p-img/pg/merge-defense-army-behind-the-wall/icon/a276c48b5694402cbefa44e6d27fcfeb?width=218",
+            "https://static.playgama.com/p-img/pg/merge-defense-army-behind-the-wall/big_preview/ba078bbffeaf437a912f0ff3d718f520?width=448"
+          ],
+          "videos": [],
+          "mobileReady": [
+            "For Android",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/merge-defense-army-behind-the-wall?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
+        },
+        {
+          "id": "239691",
+          "slug": "fragen",
+          "title": "FRAGEN: Multiplayer FPS Shooter",
+          "description": "Experience fast-paced multiplayer battles in FRAGEN. Choose from 20 weapons across 8 game modes. This FPS is playable online for free on desktop and mobile devices.",
+          "howToPlayText": "Use mouse or keyboard to play this game.",
+          "gameURL": "https://playgama.com/export/game/fragen?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7",
+          "playgamaGameUrl": "https://playgama.com/game/fragen",
+          "genres": [],
+          "tags": [],
+          "images": [
+            "https://static.playgama.com/p-img/pg/fragen/big_preview/77e556a560be4a0ca22ac8c8ba19557f?width=1200",
+            "https://static.playgama.com/p-img/pg/fragen/icon/9e20424f4dc54f489f39cd45f8ab3e3e?width=218",
+            "https://static.playgama.com/p-img/pg/fragen/big_preview/77e556a560be4a0ca22ac8c8ba19557f?width=448"
+          ],
+          "videos": [],
+          "mobileReady": [
+            "For Android",
+            "For Desktop"
+          ],
+          "gender": [
+            "Male",
+            "Female"
+          ],
+          "inGamePurchases": "No",
+          "supportedLanguages": [
+            "en-US"
+          ],
+          "screenOrientation": {
+            "horizontal": true,
+            "vertical": false
+          },
+          "embed": "<iframe src='https://playgama.com/export/game/fragen?clid=p_606e672d-cab4-4d7f-8651-e636430c27e7' allow='fullscreen; accelerometer; camera; clipboard-read; clipboard-write; screen-wake-lock; speaker-selection; web-share; geolocation; gyroscope; microphone; xr-spatial-tracking; autoplay; encrypted-media; picture-in-picture; payment; publickey-credentials-get; publickey-credentials-create; storage-access; attribution-reporting; browsing-topics' frameborder='0' width='800' height='450'></iframe>"
         }
       ]
     }
