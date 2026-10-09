@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiPlay, FiArrowRight, FiStar, FiShoppingCart, FiCheck, FiX } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { useTrendingGames, useFeaturedGame } from '../hooks/useGames';
+import { useFeaturedGame } from '../hooks/useGames';
 import { categories } from '../data/games';
+import { fetchAllLocalGames } from '../services/localApi';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -16,24 +17,32 @@ const itemVariants = {
   visible: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 100 } },
 };
 
-// ----------- Skeleton card -----------
-const SkeletonCard = () => (
-  <div className="rounded-2xl bg-slate-900/50 border border-white/10 overflow-hidden animate-pulse">
-    <div className="aspect-[3/4] bg-slate-800" />
-    <div className="p-5 space-y-2">
-      <div className="h-3 bg-slate-700 rounded w-1/2" />
-      <div className="h-4 bg-slate-700 rounded w-3/4" />
-    </div>
-  </div>
-);
+const formatGenre = (genre) => {
+  if (!genre) return 'Game';
+  return genre
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
 
 const Home = () => {
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
+  const [miniGames, setMiniGames] = useState([]);
+  const [playingMiniGame, setPlayingMiniGame] = useState(null);
   const { cart, addToCart } = useCart();
   const { game: featuredGame, loading: featuredLoading } = useFeaturedGame();
-  const { games: trendingGames, loading: trendingLoading } = useTrendingGames(8);
 
-  const displayedTrending = trendingGames.slice(0, 4);
+  useEffect(() => {
+    const loadMiniGames = async () => {
+      try {
+        const games = await fetchAllLocalGames();
+        setMiniGames(games.slice(0, 4));
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    loadMiniGames();
+  }, []);
 
   return (
     <div className="space-y-20 pb-20">
@@ -139,104 +148,75 @@ const Home = () => {
         </motion.div>
       </section>
 
-      {/* ── Trending Section ── */}
+      {/* ── Mini Games Section ── */}
       <section>
         <div className="flex justify-between items-end mb-8">
           <div>
-            <h2 className="text-3xl font-black tracking-tight mb-2">
-              Featured Games
+            <h2 className="text-3xl font-black tracking-tight mb-2 bg-gradient-to-r from-emerald-400 to-cyan-400 text-transparent bg-clip-text">
+              Online Mini Games
             </h2>
             <p className="text-slate-400">
-              Explore our curated game selection
+              Quick and fun browser games
             </p>
           </div>
           <Link
-            to="/gallery"
-            className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors flex items-center gap-1 group"
+            to="/mini-games"
+            className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1 group"
           >
-            View All <FiArrowRight className="transition-transform group-hover:translate-x-1" />
+            Play All <FiArrowRight className="transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
 
-        {trendingLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
-          </div>
-        ) : (
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            {displayedTrending.map((game) => (
-              <motion.div
-                key={game.id}
-                variants={itemVariants}
-                className="group relative rounded-2xl bg-slate-900/50 border border-white/10 overflow-hidden hover:border-indigo-500/50 transition-colors duration-300"
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"
+        >
+          {miniGames.map((game) => (
+            <motion.div key={game.id} variants={itemVariants} className="h-full">
+              <button
+                onClick={() => setPlayingMiniGame(game)}
+                className="w-full text-left group block relative rounded-2xl overflow-hidden bg-slate-900/50 border border-white/5 hover:border-emerald-500/40 transition-all duration-300 h-full flex flex-col hover:shadow-[0_0_30px_rgba(16,185,129,0.1)] hover:-translate-y-1"
               >
-                <div className="aspect-[3/4] relative overflow-hidden">
-                  <Link to={`/game/${game.slug || game.id}`} className="block w-full h-full">
-                    {game.image ? (
-                      <img
-                        src={game.image}
-                        alt={game.title}
-                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-slate-800" />
-                    )}
-                  </Link>
-                  {game.rating && (
-                    <div className="absolute top-3 right-3 bg-slate-950/80 backdrop-blur-md px-2 py-1 rounded gap-1 flex items-center border border-white/10 text-xs font-bold text-yellow-500">
-                      <FiStar className="fill-current" /> {game.rating}
-                    </div>
+                <div className="aspect-[16/9] overflow-hidden bg-slate-800 relative shrink-0">
+                  {game.image ? (
+                    <img
+                      src={game.image}
+                      alt={game.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-slate-800 to-slate-700 flex items-center justify-center" />
                   )}
-                  {game.tier && (
-                    <div className={`absolute top-3 left-3 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest border ${
-                      game.tier === 'Mighty' ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' :
-                      game.tier === 'Strong' ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30' :
-                      game.tier === 'Fair'   ? 'bg-slate-500/20 text-slate-400 border-slate-500/30' :
-                                              'bg-red-500/20 text-red-400 border-red-500/30'
-                    }`}>
-                      {game.tier}
+                  <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wider">
+                    {formatGenre(game.genre)}
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300" />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="w-14 h-14 rounded-full bg-emerald-500/90 backdrop-blur-sm flex items-center justify-center text-white shadow-[0_0_25px_rgba(16,185,129,0.6)] transform scale-75 group-hover:scale-100 transition-transform duration-300">
+                      <svg className="w-7 h-7 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
                     </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-80 group-hover:opacity-100 pointer-events-none transition-opacity z-0" />
-                </div>
-
-                <div className="absolute bottom-0 inset-x-0 p-5 transform translate-y-4 group-hover:translate-y-0 transition-transform z-10">
-                  <div className="text-xs font-semibold text-indigo-400 mb-1">{game.genre}</div>
-                  <Link to={`/game/${game.slug || game.id}`}>
-                    <h3 className="font-bold text-lg mb-2 line-clamp-1 hover:text-indigo-400 transition-colors">
-                      {game.title}
-                    </h3>
-                  </Link>
-                  <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity delay-100">
-                    <span className="font-black text-white">
-                      {game.price === 0 ? 'FREE' : `$${game.price}`}
-                    </span>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        addToCart(game);
-                      }}
-                      className={`relative z-20 p-2 rounded-lg transition-all ${
-                        cart.find((item) => item.id === game.id)
-                          ? 'bg-emerald-500/20 text-emerald-400'
-                          : 'bg-white/10 hover:bg-white/20 text-slate-200'
-                      }`}
-                    >
-                      {cart.find((item) => item.id === game.id) ? <FiCheck /> : <FiShoppingCart />}
-                    </button>
                   </div>
                 </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
+                <div className="p-4 flex-grow flex flex-col justify-between">
+                  <h3 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors line-clamp-2 leading-snug">
+                    {game.title}
+                  </h3>
+                  <div className="flex items-center justify-between mt-3 pt-2 border-t border-white/5">
+                    <span className="text-emerald-500 text-xs font-semibold group-hover:text-emerald-400 transition-colors">
+                      Play Now →
+                    </span>
+                  </div>
+                </div>
+              </button>
+            </motion.div>
+          ))}
+        </motion.div>
       </section>
 
       {/* ── Categories ── */}
@@ -265,6 +245,47 @@ const Home = () => {
           ))}
         </motion.div>
       </section>
+
+      {/* ── Mini Game Player Modal ── */}
+      <AnimatePresence>
+        {playingMiniGame && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm"
+               onClick={(e) => { if (e.target === e.currentTarget) setPlayingMiniGame(null); }}>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.25 }}
+              className="relative w-full max-w-6xl aspect-video bg-black rounded-2xl overflow-hidden border border-emerald-500/30 shadow-[0_0_60px_rgba(16,185,129,0.15)] flex flex-col"
+            >
+              <div className="absolute top-0 inset-x-0 h-14 bg-gradient-to-b from-black/90 to-transparent z-10 flex justify-between items-center px-5">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="font-bold text-emerald-400 text-sm truncate max-w-md">{playingMiniGame.title}</span>
+                </div>
+                <button
+                  onClick={() => setPlayingMiniGame(null)}
+                  className="p-2 bg-rose-500/20 hover:bg-rose-500/80 text-white rounded-lg backdrop-blur-md transition-all duration-200 shadow-lg"
+                >
+                  <FiX size={20} />
+                </button>
+              </div>
+              {playingMiniGame.website ? (
+                <iframe
+                  src={playingMiniGame.website}
+                  title={playingMiniGame.title}
+                  className="w-full h-full border-0"
+                  allow="fullscreen; autoplay; encrypted-media"
+                />
+              ) : (
+                <div className="flex-1 flex items-center justify-center text-slate-400">
+                  Game URL unavailable
+                </div>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* ── Trailer Modal ── */}
       <AnimatePresence>
