@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiPlay, FiArrowRight, FiStar, FiShoppingCart, FiCheck, FiX } from 'react-icons/fi';
+import { FiPlay, FiArrowRight, FiStar, FiX } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
 import { useFeaturedGame } from '../hooks/useGames';
 import { categories } from '../data/games';
 import { fetchAllLocalGames } from '../services/localApi';
@@ -29,7 +28,6 @@ const Home = () => {
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
   const [miniGames, setMiniGames] = useState([]);
   const [playingMiniGame, setPlayingMiniGame] = useState(null);
-  const { cart, addToCart } = useCart();
   const { game: featuredGame, loading: featuredLoading } = useFeaturedGame();
 
   useEffect(() => {
