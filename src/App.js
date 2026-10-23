@@ -13,6 +13,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import ScratchGames from './pages/ScratchGames';
 import ScratchGameDetail from './pages/ScratchGameDetail';
 import MiniGames from './pages/MiniGames';
+import SnakeArena from './pages/SnakeArena';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/scratch-games" element={<ScratchGames />} />
                 <Route path="/scratch-game/:id" element={<ScratchGameDetail />} />
                 <Route path="/mini-games" element={<MiniGames />} />
+                <Route path="/snake-arena" element={<SnakeArena />} />
               </Routes>
             </main>
 

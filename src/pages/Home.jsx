@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiPlay, FiArrowRight, FiStar, FiShoppingCart, FiCheck, FiX } from 'react-icons/fi';
+import { FiPlay, FiArrowRight, FiX, FiZap } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
-import { useFeaturedGame } from '../hooks/useGames';
 import { categories } from '../data/games';
 import { fetchAllLocalGames } from '../services/localApi';
+import GameplayShowcase from '../components/GameplayShowcase';
+import HeroVideoPlayer from '../components/HeroVideoPlayer';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -29,8 +29,6 @@ const Home = () => {
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
   const [miniGames, setMiniGames] = useState([]);
   const [playingMiniGame, setPlayingMiniGame] = useState(null);
-  const { cart, addToCart } = useCart();
-  const { game: featuredGame, loading: featuredLoading } = useFeaturedGame();
 
   useEffect(() => {
     const loadMiniGames = async () => {
@@ -68,84 +66,97 @@ const Home = () => {
           </p>
           <div className="flex flex-wrap items-center gap-4 pt-4">
             <Link
-              to="/gallery"
-              className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-500 hover:to-fuchsia-500 text-white px-8 py-4 rounded-xl font-bold transition-all duration-300 shadow-[0_0_20px_rgba(99,102,241,0.5)] hover:shadow-[0_0_30px_rgba(192,38,211,0.6)] hover:-translate-y-1"
+              to="/snake-arena"
+              className="flex items-center gap-2 bg-gradient-to-r from-cyan-500 via-indigo-600 to-fuchsia-600 hover:from-cyan-400 hover:to-fuchsia-500 text-white px-8 py-4 rounded-xl font-black transition-all duration-300 shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:shadow-[0_0_35px_rgba(236,72,153,0.6)] hover:-translate-y-1"
             >
-              <span>Browse Library</span>
+              <FiZap className="animate-pulse" />
+              <span>Play Snake Arena</span>
               <FiArrowRight />
             </Link>
-            <button 
-              onClick={() => setIsTrailerOpen(true)}
-              className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-8 py-4 rounded-xl font-bold transition-all duration-300 hover:border-white/20"
+            <Link
+              to="/scratch-games"
+              className="flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/15 text-white px-7 py-4 rounded-xl font-bold transition-all duration-300 hover:-translate-y-1"
             >
-              <FiPlay />
-              <span>Watch Trailer</span>
-            </button>
+              <span>Explore All Games</span>
+            </Link>
+            <a
+              href="#gameplay-showcase"
+              className="flex items-center gap-2 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 border border-emerald-500/40 text-emerald-300 hover:text-white px-6 py-4 rounded-xl font-bold transition-all duration-300 hover:-translate-y-1 shadow-[0_0_20px_rgba(16,185,129,0.15)]"
+            >
+              <FiPlay className="text-emerald-400" />
+              <span>Watch Video</span>
+            </a>
           </div>
 
           <div className="flex items-center gap-8 pt-8 border-t border-white/10">
             <div>
-              <div className="text-3xl font-black">500K+</div>
-              <div className="text-sm text-slate-400 font-medium tracking-wide">GAMES IN DB</div>
+              <div className="text-3xl font-black">2,000+</div>
+              <div className="text-sm text-slate-400 font-medium tracking-wide">PLAYABLE ONLINE GAMES</div>
             </div>
             <div>
-              <div className="text-3xl font-black">20,000</div>
-              <div className="text-sm text-slate-400 font-medium tracking-wide">FREE API CALLS/MO</div>
+              <div className="text-3xl font-black">100% FREE</div>
+              <div className="text-sm text-slate-400 font-medium tracking-wide">INSTANT BROWSER PLAY</div>
             </div>
           </div>
         </motion.div>
 
-        {/* Featured game card */}
+        {/* Live Gameplay Video in Hero */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-          className="flex-1 relative w-full aspect-square md:aspect-[4/5] max-w-lg mx-auto"
+          className="flex-1 w-full max-w-xl mx-auto"
         >
-          <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/20 to-fuchsia-500/20 rounded-3xl blur-2xl transform rotate-6" />
-
-          {featuredLoading ? (
-            <div className="absolute inset-0 glass-panel border border-white/20 overflow-hidden transform -rotate-2 rounded-2xl animate-pulse bg-slate-800" />
-          ) : (
-            <Link
-              to={`/game/${featuredGame?.slug || featuredGame?.id}`}
-              className="absolute inset-0 block glass-panel border border-white/20 overflow-hidden transform -rotate-2 hover:rotate-0 transition-transform duration-500"
-            >
-              {featuredGame?.image ? (
-                <img
-                  src={featuredGame.image}
-                  alt={featuredGame.title}
-                  className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-500"
-                />
-              ) : (
-                <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-500">
-                  Image Placeholder
-                </div>
-              )}
-              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950 via-slate-900/80 to-transparent p-8">
-                <div className="flex justify-between items-end gap-4">
-                  <div className="min-w-0">
-                    <h3 className="text-2xl font-bold mb-1 truncate">{featuredGame?.title || 'Game Title'}</h3>
-                    <div className="flex items-center gap-3 text-sm text-slate-300">
-                      {featuredGame?.rating && (
-                        <span className="flex items-center gap-1">
-                          <FiStar className="text-yellow-500 fill-current" />
-                          {featuredGame.rating}
-                        </span>
-                      )}
-                      {featuredGame?.genre && (
-                        <span className="text-slate-400">{featuredGame.genre}</span>
-                      )}
-                    </div>
-                  </div>
-                  <div className="shrink-0 bg-fuchsia-600 px-3 py-1 text-sm font-bold rounded-lg shadow-[0_0_10px_rgba(192,38,211,0.5)]">
-                    {featuredGame?.price === 0 ? 'FREE' : featuredGame?.price ? `$${featuredGame.price}` : 'VIEW'}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          )}
+          <HeroVideoPlayer />
         </motion.div>
+      </section>
+
+      {/* ── Live Gameplay Video Showcase ── */}
+      <GameplayShowcase />
+
+      {/* ── Snake Arena Spotlight ── */}
+      <section className="relative overflow-hidden rounded-3xl p-8 md:p-12 glass-panel border-cyan-500/30 bg-gradient-to-r from-cyan-950/40 via-slate-900/60 to-purple-950/40 shadow-[0_0_50px_rgba(6,182,212,0.15)]">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 blur-[100px] pointer-events-none rounded-full" />
+        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div className="space-y-4 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-xs font-bold tracking-wider uppercase">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+              HOT NEW MULTIPLAYER ARENA
+            </div>
+            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+              Neon Snake Arena <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-fuchsia-500">
+                Battle Royale & 2-Player Versus
+              </span>
+            </h2>
+            <p className="text-slate-300 text-base leading-relaxed">
+              Slither into the 360° cyber battleground. Eat glowing energy orbs, boost to cut off rivals, customize neon dragon skins, and play solo against 18 bots or local head-to-head with a friend on the same keyboard!
+            </p>
+            <div className="flex flex-wrap gap-4 pt-2">
+              <Link
+                to="/snake-arena"
+                className="px-8 py-3.5 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-extrabold rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-all flex items-center gap-2 hover:-translate-y-0.5"
+              >
+                <span>Enter Snake Arena</span>
+                <FiArrowRight />
+              </Link>
+            </div>
+          </div>
+          <div className="flex flex-col gap-3 shrink-0 text-xs font-semibold text-slate-300 w-full sm:w-auto">
+            <div className="flex items-center gap-2.5 bg-slate-900/80 px-4 py-3 rounded-xl border border-white/10 shadow-md">
+              <span className="text-cyan-400 font-bold">⚡ 60 FPS Fluid 360° Movement</span>
+            </div>
+            <div className="flex items-center gap-2.5 bg-slate-900/80 px-4 py-3 rounded-xl border border-white/10 shadow-md">
+              <span className="text-pink-400 font-bold">👥 Local 2-Player Shared Keyboard</span>
+            </div>
+            <div className="flex items-center gap-2.5 bg-slate-900/80 px-4 py-3 rounded-xl border border-white/10 shadow-md">
+              <span className="text-amber-400 font-bold">👑 Live Arena Leaderboard & Minimap</span>
+            </div>
+            <div className="flex items-center gap-2.5 bg-slate-900/80 px-4 py-3 rounded-xl border border-white/10 shadow-md">
+              <span className="text-emerald-400 font-bold">🎨 8 Cyber Snake Skins</span>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ── Mini Games Section ── */}
@@ -290,7 +301,7 @@ const Home = () => {
       {/* ── Trailer Modal ── */}
       <AnimatePresence>
         {isTrailerOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
                onClick={() => setIsTrailerOpen(false)}>
                <motion.div 
                  initial={{ opacity: 0, scale: 0.95 }}
@@ -300,17 +311,33 @@ const Home = () => {
                  onClick={(e) => e.stopPropagation()}
                  className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10"
                >
-                 <button 
-                   onClick={() => setIsTrailerOpen(false)}
-                   className="absolute top-4 right-4 z-10 p-2 bg-black/50 hover:bg-black/80 text-white rounded-full backdrop-blur-md transition-colors"
-                 >
-                   <FiX size={24} />
-                 </button>
+                 <div className="absolute top-0 inset-x-0 h-14 bg-gradient-to-b from-black/90 to-transparent z-10 flex justify-between items-center px-5">
+                   <div className="flex items-center gap-2">
+                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                     <span className="font-bold text-white text-sm">Geometry Dash 2.2 — Real Gameplay Video</span>
+                     <span className="hidden sm:inline text-xs text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-md font-semibold border border-emerald-500/30">Playable on Site</span>
+                   </div>
+                   <div className="flex items-center gap-3">
+                     <Link
+                       to="/scratch-game/943733386"
+                       onClick={() => setIsTrailerOpen(false)}
+                       className="px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs rounded-lg transition-all shadow-[0_0_15px_rgba(16,185,129,0.5)]"
+                     >
+                       Play Game Now →
+                     </Link>
+                     <button 
+                       onClick={() => setIsTrailerOpen(false)}
+                       className="p-1.5 bg-black/50 hover:bg-black/80 text-white rounded-lg backdrop-blur-md transition-colors"
+                     >
+                       <FiX size={20} />
+                     </button>
+                   </div>
+                 </div>
                  <iframe 
                    width="100%" 
                    height="100%" 
-                   src="https://www.youtube.com/embed/QkkoHAzjnUs?autoplay=1" 
-                   title="Game Trailer" 
+                   src="https://www.youtube-nocookie.com/embed/LxA4NJMiZ8o?autoplay=1&mute=0" 
+                   title="Geometry Dash Gameplay Trailer" 
                    frameBorder="0" 
                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                    allowFullScreen

@@ -15,6 +15,7 @@ const navLinks = [
   { name: 'Contact', path: '/contact' },
   { name: 'Scratch Games', path: '/scratch-games' },
   { name: 'Mini Games', path: '/mini-games' },
+  { name: 'Snake Arena', path: '/snake-arena', badge: 'HOT' },
 ];
 
 const Navbar = () => {
@@ -91,16 +92,21 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex items-center space-x-3 lg:space-x-5 xl:space-x-6">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className={`relative px-2 py-1 text-sm font-medium transition-colors duration-300 ${
+                className={`relative px-2 py-1 text-sm font-medium transition-colors duration-300 flex items-center gap-1.5 ${
                   location.pathname === link.path ? 'text-white' : 'text-slate-400 hover:text-white'
                 }`}
               >
-                {link.name}
+                <span>{link.name}</span>
+                {link.badge && (
+                  <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-gradient-to-r from-cyan-500 to-indigo-500 text-white shadow-[0_0_8px_rgba(6,182,212,0.8)] tracking-wider">
+                    {link.badge}
+                  </span>
+                )}
                 {location.pathname === link.path && (
                   <motion.div
                     layoutId="activeTab"
@@ -452,13 +458,18 @@ const Navbar = () => {
                   key={link.name}
                   to={link.path}
                   onClick={() => setIsOpen(false)}
-                  className={`block px-4 py-3 rounded-xl text-base font-medium ${
+                  className={`flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium ${
                     location.pathname === link.path
                       ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30'
                       : 'text-slate-300 hover:bg-white/5'
                   }`}
                 >
-                  {link.name}
+                  <span>{link.name}</span>
+                  {link.badge && (
+                    <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-gradient-to-r from-cyan-500 to-indigo-500 text-white shadow-[0_0_8px_rgba(6,182,212,0.8)] tracking-wider">
+                      {link.badge}
+                    </span>
+                  )}
                 </Link>
               ))}
               <div className="pt-4 border-t border-white/10 flex flex-col gap-4">

@@ -17,11 +17,11 @@ const myGames = [
 
 const popularGames = [
   { id: '10128407', title: 'Paper Minecraft' },
-  { id: '105500895', title: 'Geometry Dash' },
-  { id: '110543264', title: 'Slither.io' },
-  { id: '351982746', title: 'Getting Over It' },
-  { id: '400045091', title: 'Subway Surfers' },
-  { id: '137943574', title: 'Five Nights at Freddys' },
+  { id: '943733386', title: 'Geometry Dash' },
+  { id: '108566337', title: 'Slither.io' },
+  { id: '389464290', title: 'Getting Over It' },
+  { id: '946418677', title: 'Subway Surfers' },
+  { id: '612229554', title: 'Massive Multiplayer Platformer' },
   { id: '493120398', title: 'THE GREAT SNAKE ESCAPE' },
   { id: '1285171146', title: 'Frozen Frenzy' },
   { id: '847915138', title: 'Paper Plane Fly' },
