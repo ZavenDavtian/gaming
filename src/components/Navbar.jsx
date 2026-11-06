@@ -16,6 +16,7 @@ const navLinks = [
   { name: 'Scratch Games', path: '/scratch-games' },
   { name: 'Mini Games', path: '/mini-games' },
   { name: 'Snake Arena', path: '/snake-arena', badge: 'HOT' },
+  { name: 'Tank Battle', path: '/tank-battle', badge: 'NEW' },
 ];
 
 const Navbar = () => {

@@ -66,12 +66,18 @@ const Home = () => {
           </p>
           <div className="flex flex-wrap items-center gap-4 pt-4">
             <Link
-              to="/snake-arena"
-              className="flex items-center gap-2 bg-gradient-to-r from-cyan-500 via-indigo-600 to-fuchsia-600 hover:from-cyan-400 hover:to-fuchsia-500 text-white px-8 py-4 rounded-xl font-black transition-all duration-300 shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:shadow-[0_0_35px_rgba(236,72,153,0.6)] hover:-translate-y-1"
+              to="/tank-battle"
+              className="flex items-center gap-2 bg-gradient-to-r from-amber-500 via-orange-600 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-white px-8 py-4 rounded-xl font-black transition-all duration-300 shadow-[0_0_25px_rgba(245,158,11,0.5)] hover:shadow-[0_0_35px_rgba(239,68,68,0.6)] hover:-translate-y-1"
             >
               <FiZap className="animate-pulse" />
-              <span>Play Snake Arena</span>
+              <span>Play Tank Battle (NEW)</span>
               <FiArrowRight />
+            </Link>
+            <Link
+              to="/snake-arena"
+              className="flex items-center gap-2 bg-gradient-to-r from-cyan-500 via-indigo-600 to-fuchsia-600 hover:from-cyan-400 hover:to-fuchsia-500 text-white px-7 py-4 rounded-xl font-black transition-all duration-300 shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:-translate-y-1"
+            >
+              <span>Snake Arena</span>
             </Link>
             <Link
               to="/scratch-games"
