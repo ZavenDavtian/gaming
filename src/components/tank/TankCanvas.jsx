@@ -133,6 +133,9 @@ export default function TankCanvas({
     });
   };
 
+  // Ref breaks the circular dependency between applyDamageToTank and triggerExplosion
+  const triggerExplosionRef = useRef(null);
+
   const applyDamageToTank = useCallback((tank, amount, attackerId = 'Unknown') => {
     if (!tank.alive) return;
 
@@ -161,7 +164,7 @@ export default function TankCanvas({
 
       if (tank.health <= 0) {
         tank.alive = false;
-        triggerExplosion(tank.x, tank.y, 80, 50, 'tank');
+        triggerExplosionRef.current?.(tank.x, tank.y, 80, 50, 'tank');
 
         // Scoring
         const p1 = gameStateRef.current.tanks[0];
@@ -258,6 +261,7 @@ export default function TankCanvas({
       }
     });
   }, [mode, applyDamageToTank, spawnWallDebris]);
+  triggerExplosionRef.current = triggerExplosion;
 
   // Cannon firing handler
   const fireBullet = useCallback((tank) => {
