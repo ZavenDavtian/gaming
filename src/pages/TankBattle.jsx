@@ -174,11 +174,13 @@ export default function TankBattle() {
   // Online Multiplayer State
   const initialRoom = (searchParams.get('room') || '').trim().toUpperCase() || 'TANK-8421';
   const [roomCode, setRoomCode] = useState(initialRoom);
-  const [socketUrl] = useState('ws://localhost:8081');
+  const [socketUrl, setSocketUrl] = useState('ws://localhost:8081');
   const [copiedLink, setCopiedLink] = useState(false);
-  const [socketStatus, setSocketStatus] = useState({ status: 'disconnected', ping: 0, isUsingBroadcast: false });
+  const [socketStatus, setSocketStatus] = useState({ status: 'disconnected', transport: 'none', ping: 0, isUsingBroadcast: false });
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
+  const [onlinePlayerCount, setOnlinePlayerCount] = useState(1);
+  const [showAdvancedServer, setShowAdvancedServer] = useState(false);
 
   // Memoized player configs to avoid unnecessary re-initializations
   const player1Config = useMemo(
@@ -216,25 +218,46 @@ export default function TankBattle() {
     localStorage.setItem(STORAGE_KEY_TANK_P1_ID, selectedTankId);
   }, [selectedTankId]);
 
-  // Read URL invite room code if present
+  // Read URL invite room code & map if present
   useEffect(() => {
     const urlRoom = searchParams.get('room');
+    const urlMap = searchParams.get('map');
     if (urlRoom) {
       setRoomCode(urlRoom.toUpperCase());
       setMode('online');
+      if (urlMap && MAPS.some((m) => m.id === urlMap)) {
+        setSelectedMapId(urlMap);
+      }
+      if (!localStorage.getItem(STORAGE_KEY_TANK_P1_NAME)) {
+        setPlayerName('Challenger');
+      }
     }
   }, [searchParams]);
 
-  // Subscribe to chat incoming events when online
+  // Subscribe to socket status and player count events
   useEffect(() => {
-    const unsub = tankSocketClient.on('chat', (data) => {
+    const unsubChat = tankSocketClient.on('chat', (data) => {
       setChatMessages((prev) => [...prev.slice(-30), data]);
     });
-    return () => unsub();
+    const unsubJoin = tankSocketClient.on('player_joined', () => {
+      setOnlinePlayerCount((prev) => Math.max(2, prev + 1));
+    });
+    const unsubLeft = tankSocketClient.on('player_left', () => {
+      setOnlinePlayerCount((prev) => Math.max(1, prev - 1));
+    });
+    const unsubStatus = tankSocketClient.on('status', (st) => {
+      setSocketStatus(st);
+    });
+    return () => {
+      unsubChat();
+      unsubJoin();
+      unsubLeft();
+      unsubStatus();
+    };
   }, []);
 
   const handleCopyInviteLink = () => {
-    const url = `${window.location.origin}/tank-battle?room=${roomCode}`;
+    const url = `${window.location.origin}/tank-battle?room=${roomCode}&map=${selectedMapId}`;
     navigator.clipboard.writeText(url);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2500);
@@ -252,7 +275,7 @@ export default function TankBattle() {
   const generateNewRoomCode = () => {
     const code = `TANK-${Math.floor(1000 + Math.random() * 9000)}`;
     setRoomCode(code);
-    setSearchParams({ room: code });
+    setSearchParams({ room: code, map: selectedMapId });
   };
 
   const toggleFullscreen = () => {
@@ -381,6 +404,36 @@ export default function TankBattle() {
       {/* Main Game Arena / Staging Area */}
       {!isPlaying ? (
         <div className="space-y-8">
+          {/* Invite Detected Banner */}
+          {searchParams.get('room') && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="p-5 md:p-6 rounded-3xl bg-gradient-to-r from-cyan-900/50 via-slate-900 to-indigo-900/50 border border-cyan-400/40 shadow-[0_0_30px_rgba(6,182,212,0.25)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+            >
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider">
+                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
+                  Battle Invitation Detected
+                </div>
+                <h3 className="text-lg md:text-xl font-black text-white">
+                  Invited to Battle Room: <span className="text-cyan-300 font-mono">{roomCode}</span>
+                </h3>
+                <p className="text-xs text-slate-300">
+                  Pick your combat tank class below and deploy into the battle arena with your friend!
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleStartGame}
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-black text-sm uppercase tracking-wider shadow-lg shadow-cyan-500/30 shrink-0 flex items-center gap-2 hover:scale-105 transition-all"
+              >
+                <FiPlay className="fill-current" />
+                <span>Deploy Now</span>
+              </button>
+            </motion.div>
+          )}
+
           {/* Online Match Setup Box (if Online mode selected) */}
           {mode === 'online' && (
             <motion.div
@@ -395,18 +448,36 @@ export default function TankBattle() {
                     <span>Real-Time Invite Code & Matchmaking</span>
                   </h3>
                   <p className="text-xs text-slate-400 mt-1">
-                    Share your custom invite code with a friend or open two browser tabs to duel instantly!
+                    Share your custom invite link with a friend or duel across two tabs instantly!
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-xs text-emerald-400 font-bold uppercase tracking-wider">
-                    {socketStatus.status === 'connected' ? 'WebSocket Live Server' : 'Cross-Tab Instant Ready'}
-                  </span>
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-white/10 text-xs font-bold text-cyan-300">
+                    <FiUsers />
+                    <span>{onlinePlayerCount} {onlinePlayerCount === 1 ? 'Player' : 'Players'} in Lobby</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2.5 h-2.5 rounded-full ${
+                      socketStatus.status === 'connected'
+                        ? 'bg-emerald-400 animate-pulse'
+                        : socketStatus.status === 'cross_tab'
+                        ? 'bg-cyan-400 animate-pulse'
+                        : 'bg-amber-400'
+                    }`} />
+                    <span className="text-xs text-emerald-400 font-bold uppercase tracking-wider">
+                      {socketStatus.transport === 'webrtc'
+                        ? 'WebRTC P2P (Internet & LAN)'
+                        : socketStatus.transport === 'websocket'
+                        ? 'WebSocket Server'
+                        : socketStatus.status === 'cross_tab'
+                        ? 'Cross-Tab Multi-Window'
+                        : 'P2P Ready'}
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {/* Room Code Box */}
                 <div className="p-4 rounded-2xl bg-slate-950/70 border border-white/10 space-y-2">
                   <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
@@ -419,7 +490,7 @@ export default function TankBattle() {
                       onChange={(e) => {
                         const val = e.target.value.toUpperCase();
                         setRoomCode(val);
-                        setSearchParams({ room: val });
+                        setSearchParams({ room: val, map: selectedMapId });
                       }}
                       className="w-full bg-slate-900 border border-cyan-500/40 rounded-xl px-3 py-2 text-white font-mono font-bold tracking-wider focus:outline-none focus:border-cyan-400 text-sm"
                       placeholder="e.g. TANK-8421"
@@ -444,7 +515,7 @@ export default function TankBattle() {
                     className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/30 hover:to-blue-500/30 border border-cyan-500/40 text-cyan-300 text-xs font-bold transition-all shadow-md"
                   >
                     {copiedLink ? <FiCheck className="text-emerald-400" /> : <FiCopy />}
-                    <span>{copiedLink ? 'Link Copied to Clipboard!' : 'Copy Invite Link'}</span>
+                    <span>{copiedLink ? 'Link Copied!' : 'Copy Invite Link'}</span>
                   </button>
                 </div>
 
@@ -462,6 +533,75 @@ export default function TankBattle() {
                     placeholder="Commander Name"
                   />
                 </div>
+
+                {/* AI Enemy Tanks in Match */}
+                <div className="p-4 rounded-2xl bg-slate-950/70 border border-white/10 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                      AI Enemy Tanks ({botCount === 0 ? '1v1 Duel' : `${botCount} Bots`})
+                    </label>
+                    <span className="text-[10px] text-cyan-400 font-semibold">
+                      {botCount === 0 ? 'PvP Only' : 'PvP + AI'}
+                    </span>
+                  </div>
+                  <div className="flex gap-1">
+                    {[0, 1, 2, 3, 4, 5].map((cnt) => (
+                      <button
+                        key={cnt}
+                        type="button"
+                        onClick={() => setBotCount(cnt)}
+                        className={`flex-1 py-2 rounded-lg font-bold text-xs transition-all ${
+                          botCount === cnt
+                            ? 'bg-cyan-500 text-slate-950 font-black shadow-md shadow-cyan-500/20'
+                            : 'bg-slate-900 text-slate-400 hover:text-white border border-white/5'
+                        }`}
+                      >
+                        {cnt === 0 ? '0' : `${cnt}`}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Server Options Footer */}
+                <div className="md:col-span-4 pt-1 border-t border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-400">
+                  <div className="flex items-center gap-2">
+                    <span className="text-emerald-400 font-bold">✓ Zero-Config:</span>
+                    <span>Supports WebRTC Peer-to-Peer over internet/LAN and cross-tab play.</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowAdvancedServer(!showAdvancedServer)}
+                    className="text-cyan-400 hover:text-cyan-300 font-semibold underline underline-offset-2 transition-colors"
+                  >
+                    {showAdvancedServer ? 'Hide Server Settings' : 'Custom WebSocket Server...'}
+                  </button>
+                </div>
+
+                {showAdvancedServer && (
+                  <div className="md:col-span-4 p-3.5 rounded-xl bg-slate-950/90 border border-cyan-500/20 space-y-2">
+                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+                      Custom WebSocket Server URL
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={socketUrl}
+                        onChange={(e) => setSocketUrl(e.target.value)}
+                        className="flex-1 px-3 py-1.5 bg-slate-900 border border-white/10 rounded-lg text-white font-mono text-xs focus:outline-none focus:border-cyan-400"
+                        placeholder="ws://localhost:8081"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          tankSocketClient.connect(socketUrl, roomCode, player1Config);
+                        }}
+                        className="px-4 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-xs font-bold"
+                      >
+                        Connect
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </motion.div>
           )}

@@ -179,6 +179,10 @@ export default function TankCanvas({
 
         if (mode === 'online' && tank.isPlayer) {
           tankSocketClient.sendTankDestroyed(tank.id, tank.name, attackerId);
+          if (tank.playerNum === 1) {
+            gameStateRef.current.gameOver = true;
+            if (onGameOver) onGameOver({ winner: null, tanks: gameStateRef.current.tanks });
+          }
         }
 
         // Check if game over in local 2p or SP
@@ -469,7 +473,7 @@ export default function TankCanvas({
         lastSpecialUsed: 0,
       };
       tanks.push(p2);
-    } else if (mode === 'sp') {
+    } else if (mode === 'sp' || (mode === 'online' && botCount > 0)) {
       const botNames = ['Titan-AI', 'Phantom-Bot', 'Viper-Omega', 'Havoc-Droid', 'Aegis-Unit'];
       const botSkins = ['neon-phantom', 'toxic-viper', 'magma-havoc', 'glacial-fortress', 'golden-warlord'];
       const spawns = map.spawns.slice(1);
@@ -617,16 +621,47 @@ export default function TankCanvas({
       }),
 
       tankSocketClient.on('player_moved', (p) => {
-        const remote = gameStateRef.current.remoteTanks.get(p.id);
-        if (remote) {
+        let remote = gameStateRef.current.remoteTanks.get(p.id);
+        if (!remote) {
+          const def = getTankById(p.tankId || 'neon-phantom');
+          remote = {
+            id: p.id,
+            name: p.name || 'Opponent',
+            tankId: p.tankId || 'neon-phantom',
+            tankDef: def,
+            isRemote: true,
+            alive: p.alive !== false,
+            health: p.health || def.stats.health,
+            maxHealth: p.maxHealth || def.stats.health,
+            shield: p.shield || 0,
+            recoil: 0,
+            x: p.x,
+            y: p.y,
+            hullAngle: p.hullAngle || 0,
+            turretAngle: p.turretAngle || 0,
+            targetX: p.x,
+            targetY: p.y,
+            targetHullAngle: p.hullAngle || 0,
+            targetTurretAngle: p.turretAngle || 0,
+            speed: p.speed || 0,
+          };
+          gameStateRef.current.remoteTanks.set(p.id, remote);
+          addKillFeedItem(p.name || 'Opponent', 'Entered Sector', 'Deployment');
+        } else {
           remote.targetX = p.x;
           remote.targetY = p.y;
           remote.targetHullAngle = p.hullAngle;
           remote.targetTurretAngle = p.turretAngle;
-          remote.speed = p.speed;
+          remote.speed = p.speed || 0;
           remote.health = p.health;
           remote.shield = p.shield || 0;
           remote.alive = p.alive;
+        }
+      }),
+
+      tankSocketClient.on('map_sync', (syncedMapId) => {
+        if (syncedMapId && syncedMapId !== mapId) {
+          console.log('[TankCanvas] Synced map to host arena:', syncedMapId);
         }
       }),
 
@@ -686,6 +721,16 @@ export default function TankCanvas({
           const p1 = gameStateRef.current.tanks[0];
           if (p1 && p1.alive) {
             applyDamageToTank(p1, data.damage, data.shooterId);
+          }
+        } else {
+          const bot = gameStateRef.current.tanks.find((t) => t.id === data.targetId && t.isBot);
+          if (bot && bot.alive) {
+            applyDamageToTank(bot, data.damage, data.shooterId);
+          } else {
+            const remote = gameStateRef.current.remoteTanks.get(data.targetId);
+            if (remote && remote.alive) {
+              addFloatingText(`-${data.damage}`, remote.x, remote.y - 30, '#ef4444');
+            }
           }
         }
       }),
@@ -1018,11 +1063,25 @@ export default function TankCanvas({
       }
     }
 
-    // 3. AI BOTS (SP)
-    if (mode === 'sp') {
+    // 3. AI BOTS (SP & Online)
+    if (mode === 'sp' || mode === 'online') {
+      const allTargets = [
+        p1 && p1.alive ? p1 : null,
+        ...Array.from(state.remoteTanks.values()).filter((r) => r.alive),
+      ].filter(Boolean);
+
       state.tanks.forEach((tank) => {
         if (!tank.isBot || !tank.alive) return;
-        updateAIBot(tank, p1, dt);
+        let nearestTarget = p1;
+        let minDist = Infinity;
+        for (const t of allTargets) {
+          const dist = Math.hypot(t.x - tank.x, t.y - tank.y);
+          if (dist < minDist) {
+            minDist = dist;
+            nearestTarget = t;
+          }
+        }
+        updateAIBot(tank, nearestTarget, dt);
       });
     }
 
@@ -1220,7 +1279,7 @@ export default function TankCanvas({
         if (dist < 24) {
           applyDamageToTank(targetTank, b.damage, b.ownerId);
 
-          if (mode === 'online' && !targetTank.isRemote) {
+          if (mode === 'online' && !b.isRemote) {
             tankSocketClient.sendTankHit(targetTank.id, b.damage);
           }
 
